@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/TomMulvaney/errors/cheney/errors"
-	// TODO: Use pkg/errors.Wrap
 )
 
 func httpMiddleware() error {
