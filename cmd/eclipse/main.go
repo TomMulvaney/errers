@@ -3,20 +3,23 @@ package main
 import (
 	"fmt"
 
-	"github.com/TomMulvaney/errors/cheney/errors"
+	"github.com/TomMulvaney/errors"
+	log "github.com/sirupsen/logrus"
 )
 
-func httpMiddleware() error {
-	return errors.Unreachable() // TODO
+func craterServerGetGroup() error {
+	return errors.BadReq(errors.New("Crater has message about what went wrong"), "Crater Server")
 }
 
-func callCrater() error {
+func craterClientGetGroup() error {
 	fmt.Println("Calling Crater")
-	fmt.Println("Crater is Unreachable")
 
-	// Relay crater error with Wrap
+	err := craterServerGetGroup()
 
-	// TODO: Return Unreachable
+	if err != nil {
+		return errors.Wrap(err, "Failed reading group from Crater")
+	}
+
 	return nil
 }
 
@@ -27,11 +30,23 @@ func galaxyAPIHandler() error {
 	return nil
 }
 
-func handleError(err error) error {
-	// Log error
+func convertError(err error) error {
+	e, ok := err.(errors.IError)
+	if ok {
+		switch e.Status() {
+		case errors.StatusUnreachable: // Convert Unreachable to Internal
+			err = errors.Internal(e)
+		}
+	}
 
-	// Convert: unreachable to Internal
-	// Relay: badReq and Internal
+	return err
+}
+
+func handleError(err error) error {
+	// Log errors here, eases burden on handlers
+	log.WithError(err).Error("Failed Request")
+
+	err = convertError(err)
 
 	// Write HTTP status
 	return nil
