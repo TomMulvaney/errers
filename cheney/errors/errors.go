@@ -3,7 +3,7 @@ package errors
 import (
 	"strings"
 
-	basIErrors "errors"
+	baseErrors "errors"
 
 	"github.com/pkg/errors"
 )
@@ -14,7 +14,7 @@ const (
 
 // New wraps standard library errors
 func New(msg string) error {
-	return basIErrors.New(msg)
+	return baseErrors.New(msg)
 }
 
 // Wrap wraps pkg error
@@ -23,113 +23,55 @@ func Wrap(err error, messages ...string) error {
 	return errors.Wrap(err, msg)
 }
 
-// TODO: Rename to Errar, and errar
+type ErrorStatus int
 
 //// IError ...
 
 // IError ...
 type IError interface {
 	error
-	isIError() bool
+	isError() bool
+	Status() ErrorStatus
 }
 
-// IError ... Abstract (no constructor)?
-type errar struct {
+type errorImp struct {
 	error
+	status ErrorStatus
 }
 
-func (e *errar) isIError() bool {
+func (e *errorImp) isError() bool {
 	return true
 }
 
-func (e *errar) Error() string {
+func (e *errorImp) Error() string {
 	return e.Error()
 }
 
-// IsIError ...
-func IsIError(err error) bool {
+func (e *errorImp) Status() ErrorStatus {
+	return e.status
+}
+
+// IsError ...
+func IsError(err error) bool {
 	e, ok := err.(IError)
-	return ok && e.isIError()
+	return ok && e.isError()
 }
 
-//// BadReq ...
-
-// IBadReq ...
-type IBadReq interface {
-	IError
-	isBadReq() bool
-}
-
-type badReq struct {
-	IError
-}
+// TODO
 
 // BadReq constructor
 func BadReq(err error, message string) error {
-	return Wrap(&badReq{}, strings.Join([]string{err.Error(), message}, delim)) // TODO: This could probably be more computationally efficient
-}
-
-// isBadReq method
-func (*badReq) isBadReq() bool {
-	return true
-}
-
-// IsBadReq function
-func IsBadReq(err error) bool {
-	e, ok := err.(IBadReq)
-	return ok && e.isBadReq()
-}
-
-//// Internal
-
-// IInternal ...
-type IInternal interface {
-	IError
-	isInternal() bool
-}
-
-type internal struct {
-	IError
+	return Wrap(&errorImp{
+		status: 
+	}, strings.Join([]string{err.Error(), message}, delim)) // TODO: This could probably be more computationally efficient
 }
 
 // Internal constructor
 func Internal(err error, message string) error {
-	return Wrap(&badReq{}, strings.Join([]string{err.Error(), message}, delim))
-}
-
-func (*internal) isInternal() bool {
-	return true
-}
-
-// IsInternal ...
-func IsInternal(err error) bool {
-	e, ok := err.(IInternal)
-	return ok && e.isInternal()
-}
-
-//// Unreachable
-
-// IUnreachable ...
-type IUnreachable interface {
-	IError
-	isUnreachable() bool
-}
-
-type unreachable struct {
-	IError
+	return Wrap(&internal{}, strings.Join([]string{err.Error(), message}, delim))
 }
 
 // Unreachable constructor
 func Unreachable(err error, message string) error {
-	return Wrap(&badReq{}, strings.Join([]string{err.Error(), message}, delim))
-}
-
-func (*unreachable) isUnreachable() bool {
-	return true
-}
-
-// IsUnreachable ...
-func IsUnreachable(err error) bool {
-	e, ok := err.(IUnreachable)
-	return ok && e.isUnreachable()
+	return Wrap(&unreachable{}, strings.Join([]string{err.Error(), message}, delim))
 }
