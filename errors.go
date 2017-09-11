@@ -3,8 +3,6 @@ package errors
 import (
 	"fmt"
 
-	baseErrors "errors"
-
 	pkgErrors "github.com/pkg/errors"
 )
 
@@ -95,76 +93,4 @@ func Internal(err error, messages ...string) error {
 // Unreachable constructor
 func Unreachable(err error, messages ...string) error {
 	return NewStatus(StatusUnreachable, err, messages...)
-}
-
-// Test ...
-func Test() {
-	fmt.Println("Running Test")
-	err := pkgErrors.New("Original Error;")
-	err = pkgErrors.Wrap(err, "Wrapping Error;")
-	err = pkgErrors.Wrap(err, "Double Wrapping Error;")
-	fmt.Println("Error: ", err)
-}
-
-// Test2 ...
-func Test2() {
-	fmt.Println("Running Test2")
-	err := New("Original Error")
-	err = Wrap(err, "Wrapping Error")
-	err = Wrap(err, "Double Wrapping Error")
-	fmt.Println("Error: ", err)
-}
-
-// Test3 ...
-func Test3() {
-	fmt.Println("Running Test3")
-
-	wrapMessages := []string{"Wrapping Error", "Double Wrapping Error", "Triple Wrapping Error"}
-
-	err := New("Original Error")
-
-	for _, msg := range wrapMessages {
-		err = Wrap(err, msg)
-	}
-
-	fmt.Println("Error: ", err)
-}
-
-// Test4 ...
-func Test4() {
-	fmt.Println("Running Test4")
-
-	err := New("Original Error")
-
-	err = NewStatusTest(StatusBadReq, err, "Wrap Error")
-
-	fmt.Println("Error: ", err)
-}
-
-// Test5 ...
-func Test5() {
-	fmt.Println("Running Test5")
-
-	err := pkgErrors.New("Hello")
-
-	err = &errorImp{
-		error:  err,
-		status: StatusBadReq,
-	}
-
-	fmt.Println(err)
-}
-
-// Test6 ...
-func Test6() {
-	fmt.Println("Running Test6")
-
-	err := baseErrors.New("Hello")
-
-	err = &errorImp{
-		error:  err,
-		status: StatusBadReq,
-	}
-
-	fmt.Println(err)
 }
