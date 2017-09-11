@@ -3,7 +3,7 @@ package errors
 import (
 	"fmt"
 
-	baseErrors = "errors"
+	baseErrors "errors"
 
 	pkgErrors "github.com/pkg/errors"
 )
@@ -40,9 +40,9 @@ type errorImp struct {
 	status ErrorStatus
 }
 
-func (e *errorImp) Error() string {
-	return e.Error()
-}
+// func (e *errorImp) Error() string {
+// 	return e.Error()
+// }
 
 func (e *errorImp) Status() ErrorStatus {
 	return e.status
@@ -155,16 +155,16 @@ func Test5() {
 	fmt.Println(err)
 }
 
-// // Test6 ...
-// func Test6() {
-// 	fmt.Println("Running Test6")
+// Test6 ...
+func Test6() {
+	fmt.Println("Running Test6")
 
-// 	err := baseErrors.New("Hello")
+	err := baseErrors.New("Hello")
 
-// 	err = &errorImp{
-// 		error:  err,
-// 		status: StatusBadReq,
-// 	}
+	err = &errorImp{
+		error:  err,
+		status: StatusBadReq,
+	}
 
-// 	fmt.Println(err)
-// }
+	fmt.Println(err)
+}

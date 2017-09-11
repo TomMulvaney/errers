@@ -54,7 +54,7 @@ func main() {
 	// err := barServer()
 	// fmt.Println(err.Error())
 
-	errors.Test5()
+	errors.Test4()
 
 	// fooAPIMiddleware()
 }
