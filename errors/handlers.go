@@ -24,30 +24,12 @@ func HandleErrer(err error, options ...Option) (error, bool) { // Ignore warning
 			log.WithError(err).WithFields(*cfg.logFields).Error("E") // TODO: Maybe add Last() to IErrer
 		}
 
+		if cfg.overwriteMessageWithStatus {
+			// TODO: Overwrite message with status converted to string
+		}
+
 		return err, true
 	}
 
 	return err, false
-}
-
-type handlerConfig struct {
-	mappers   []StatusMapper
-	logFields *log.Fields // Pointer lets us do a null check to decide whether to log
-}
-
-// Option ...
-type Option func(*handlerConfig)
-
-// WithStatusMapper ...
-func WithStatusMapper(mapper StatusMapper) Option {
-	return func(cfg *handlerConfig) {
-		cfg.mappers = append(cfg.mappers, mapper)
-	}
-}
-
-// WithLogFields ...
-func WithLogFields(logFields log.Fields) Option {
-	return func(cfg *handlerConfig) {
-		cfg.logFields = &logFields
-	}
 }

@@ -68,8 +68,8 @@ func (e *Errer) Status() int {
 	return e.status
 }
 
-// StatusUInt32 ...
-func (e *Errer) StatusUInt32() uint32 {
+// StatusU32 ...
+func (e *Errer) StatusU32() uint32 {
 	return uint32(e.status)
 }
 
