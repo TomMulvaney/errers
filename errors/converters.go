@@ -6,12 +6,16 @@ type ErrorConverter interface {
 }
 
 type errorConverter struct {
-	Do errorConverterFunc
+	do errorConverterFunc
+}
+
+func (ec *errorConverter) Do(err error) error {
+	return ec.do(err)
 }
 
 func NewErrorConverter(do errorConverterFunc) *errorConverter { // This errors when return interface
 	return &errorConverter{
-		Do: do,
+		do: do,
 	}
 }
 

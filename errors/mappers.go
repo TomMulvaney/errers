@@ -6,14 +6,18 @@ type StatusMapper interface {
 }
 
 type statusMapper struct {
-	Do statusMapperFunc
+	do statusMapperFunc
 }
 
 // NewStatusMapper ...
-func NewStatusMapper(do statusMapperFunc) *statusMapper {
+func NewStatusMapper(do statusMapperFunc) StatusMapper {
 	return &statusMapper{
-		Do: do,
+		do: do,
 	}
+}
+
+func (sm *statusMapper) Do(status int) int {
+	return sm.do(status)
 }
 
 type statusMapperFunc func(status int) int
