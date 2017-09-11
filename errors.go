@@ -1,11 +1,9 @@
 package errors
 
 import (
-	"strings"
+	"fmt"
 
-	baseErrors "errors"
-
-	"github.com/pkg/errors"
+	pkgErrors "github.com/pkg/errors"
 )
 
 type ErrorStatus int
@@ -20,19 +18,19 @@ const (
 
 // New wraps standard library errors
 func New(msg string) error {
-	return baseErrors.New(msg)
+	return pkgErrors.New(msg)
 }
 
 // Wrap wraps pkg error
-func Wrap(err error, messages ...string) error {
-	msg := strings.Join(messages, delim)
-	return errors.Wrap(err, msg)
+func Wrap(err error, message string) error {
+	return pkgErrors.Wrap(err, message+delim)
 }
 
 // IError ...
 type IError interface {
 	error
 	Status() ErrorStatus
+	isIError() bool
 }
 
 type errorImp struct {
@@ -48,11 +46,19 @@ func (e *errorImp) Status() ErrorStatus {
 	return e.status
 }
 
+func (e *errorImp) isIError() bool {
+	return true
+}
+
+// IsIError ...
+func IsIError(err error) bool {
+	e, ok := err.(IError)
+	return ok && e.isIError()
+}
+
 func new(status ErrorStatus, err error, messages ...string) error {
-	if len(messages) > 0 {
-		for _, message := range messages {
-			err = Wrap(err, message)
-		}
+	for _, message := range messages {
+		err = pkgErrors.Wrap(err, message+delim)
 	}
 
 	return &errorImp{
@@ -74,4 +80,11 @@ func Internal(err error, messages ...string) error {
 // Unreachable constructor
 func Unreachable(err error, messages ...string) error {
 	return new(StatusUnreachable, err, messages...)
+}
+
+// Test ...
+func Test() {
+	err := pkgErrors.New("Original Error")
+	err = pkgErrors.Wrap(err, "Wrapping Error")
+	fmt.Println("Error: ", err)
 }
