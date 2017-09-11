@@ -51,10 +51,10 @@ func main() {
 
 	fmt.Println("I have just received a request")
 
-	err := barServer()
-	fmt.Println(err.Error())
+	// err := barServer()
+	// fmt.Println(err.Error())
 
-	//errors.Test()
+	errors.Test5()
 
 	// fooAPIMiddleware()
 }
