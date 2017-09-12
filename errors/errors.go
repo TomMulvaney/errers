@@ -32,7 +32,7 @@ func New(msg string) error {
 func Wrap(err error, message string) error {
 	return &Errer{
 		error:  pkgErrors.Wrap(err, message),
-		status: StatusUnknown, // TODO: Convert from HTTP and GRPC
+		status: StatusUnknown, // TODO: Get status from err param, if has no status then set StatusUnknown
 	}
 }
 
