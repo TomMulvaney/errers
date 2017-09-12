@@ -5,6 +5,7 @@ import (
 )
 
 type handlerConfig struct {
+	converters                 []ErrorConverter
 	mappers                    []StatusMapper
 	logFields                  *log.Fields // Pointer lets us do a null check to decide whether to log
 	overwriteMessageWithStatus bool
