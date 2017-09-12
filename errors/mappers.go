@@ -1,5 +1,9 @@
 package errors
 
+import (
+	"net/http"
+)
+
 // StatusMapper ...
 type StatusMapper interface {
 	Do(status int) int
@@ -22,18 +26,48 @@ func (sm *statusMapper) Do(status int) int {
 
 type statusMapperFunc func(status int) int
 
+var (
+	fromHTTP map[int]int // Populated in init
+
+	toHTTP = map[int]int{
+		StatusBadReq:              http.StatusBadRequest,
+		StatusForbidden:           http.StatusForbidden,
+		StatusNotFound:            http.StatusNotFound,
+		StatusWrongAcceptType:     http.StatusNotAcceptable,
+		StatusReqTimeout:          http.StatusRequestTimeout,
+		StatusPreconditionFailed:  http.StatusPreconditionFailed,
+		StatusTooManyReqs:         http.StatusTooManyRequests,
+		StatusInternal:            http.StatusInternalServerError,
+		StatusUnimplemented:       http.StatusNotImplemented,
+		StatusUpstreamUnreachable: http.StatusBadGateway,
+		StatusUnavailable:         http.StatusServiceUnavailable,
+	}
+)
+
 // ToHTTPStatus ...
 func ToHTTPStatus(status int) int {
-	return StatusUnknown
+	httpStatus, ok := toHTTP[status]
+
+	if ok {
+		return httpStatus
+	}
+
+	return http.StatusInternalServerError
 }
 
 // FromHTTPStatus ...
-func FromHTTPStatus(status int) int {
+func FromHTTPStatus(httpStatus int) int {
+	status, ok := fromHTTP[httpStatus]
+
+	if ok {
+		return status
+	}
+
 	return StatusUnknown
 }
 
 // ToErrerAPIStatus is for converting errer statuses for internal use to errer statuses for API clients
-// For example, convert Unreachable to Internal because the client doesn't care that the server couldn't reach the other server
+// For example, convert UpstreamUnreachable to Internal to obfuscate the system to end users
 // Should this be done in the handlers?
 func ToErrerAPIStatus(status int) int {
 	return StatusUnknown

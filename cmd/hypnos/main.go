@@ -46,7 +46,7 @@ func hypnosAPIMiddlerware() {
 	err, ok := handleHypnosError(err) // This bit is optional, maybe there is no HypnosError type
 
 	if !ok {
-		err, ok = errors.HandleIErrer(err)
+		err, ok = errors.HandleErrer(err)
 
 		if !ok {
 			// Log Warning
@@ -54,9 +54,9 @@ func hypnosAPIMiddlerware() {
 		}
 	}
 
-	httpStatus := errors.ErrerToHTTP(err)
+	// httpStatus := errors.ToHTTPStatus(err)
 
-	fmt.Println("Writing Header: ", httpStatus)
+	// fmt.Println("Writing Header: ", httpStatus)
 
 	fmt.Println("Returning err: ", err)
 }

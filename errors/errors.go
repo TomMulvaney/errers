@@ -6,16 +6,6 @@ import (
 	pkgErrors "github.com/pkg/errors"
 )
 
-const (
-	StatusUnknown int = iota
-	StatusBadReq
-	StatusInternal
-	StatusUnreachable
-	StatusUnimplemented
-
-	delim = ": " // Same delim as pkgErrors
-)
-
 // IErrer ...
 type IErrer interface {
 	error
@@ -99,9 +89,9 @@ func Internal(err error, messages ...string) error {
 	return WrapStatus(err, StatusInternal, messages...)
 }
 
-// Unreachable constructor
-func Unreachable(err error, messages ...string) error {
-	return WrapStatus(err, StatusUnreachable, messages...)
+// UpstreamUnreachable constructor
+func UpstreamUnreachable(err error, messages ...string) error {
+	return WrapStatus(err, StatusUpstreamUnreachable, messages...)
 }
 
 // Unimplemented constructor
