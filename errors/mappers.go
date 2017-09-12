@@ -4,6 +4,10 @@ import (
 	"net/http"
 )
 
+// TODO: Deprecate StatusMapper, the same thing can be achieved with ErrorConverter.
+// Using ErrorConverter is slightly less computationally efficient, but terser and more orthogonal
+// Keep status mapping functions for error conversion
+
 // StatusMapper ...
 type StatusMapper interface {
 	Do(status int) int
