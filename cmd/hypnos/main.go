@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/TomMulvaney/errers/errors"
+	"github.com/nskeleton/errors"
 )
 
 func barServer() error {

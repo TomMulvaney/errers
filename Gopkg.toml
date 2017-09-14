@@ -1,0 +1,15 @@
+[[constraint]]
+  branch = "master"
+  name = "github.com/nskeleton/errors"
+
+[[constraint]]
+  name = "github.com/pkg/errors"
+  version = "0.8.0"
+
+[[constraint]]
+  name = "github.com/sirupsen/logrus"
+  version = "1.0.3"
+
+[[constraint]]
+  name = "google.golang.org/grpc"
+  version = "^1.6.0"

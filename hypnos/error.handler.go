@@ -1,7 +1,7 @@
 package hypnos
 
 import (
-	"github.com/TomMulvaney/errers/errors"
+	"github.com/nskeleton/errors"
 )
 
 func hypnosToHTTPStatus(status int) int {
