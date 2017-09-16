@@ -3,34 +3,24 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"path"
 
-	"github.com/nskeleton/errors"
 	log "github.com/sirupsen/logrus"
 )
 
 func main() {
-	fmt.Println("Hello World! I am a dummy REST API")
-	fmt.Println("I am called Hypnos, after the greek goddess of sleep")
+	fmt.Println("Hello World! I am the Hypnos REST API")
+	fmt.Println("I am named after the greek god of sleep (REST, get it?)")
 
-	fmt.Println("Received request")
-
-	err := errors.New("Nightmare", errors.StatusUnknown)
-
-	err = errors.Wrap(err, "Nightmare about not being able to wake up from the nightmare")
-
-	err = errors.Internal(err, "We are experiencing some technical difficulties", "Please try to relax with this smooth jazz")
-
-	var options []errors.Option
-
-	// TODO: Convert to HTTP Status
+	fmt.Println("Received GET request for  dream")
 
 	w := NewResponseWriter()
-	options = append(options, errors.WriteHeader(w, http.StatusInternalServerError))
 
-	logFields := log.Fields{
-		"Hello": "World",
+	r, err := http.NewRequest("GET", path.Join(urlBase, "dreams/happy-place"), nil)
+
+	if err != nil {
+		log.WithError(err).Fatal("Failed creating dummy req")
 	}
-	options = append(options, errors.LogError(logFields))
 
-	errors.HandleError(err, options...)
+	APIMiddleware(w, r)
 }

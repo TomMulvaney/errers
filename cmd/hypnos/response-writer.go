@@ -14,15 +14,15 @@ func NewResponseWriter() *ResponseWriter {
 }
 
 func (w *ResponseWriter) Write(b []byte) (int, error) {
-	fmt.Println("ResponseWriter.Write(): ", string(b))
+	fmt.Println("Writing Response: ", string(b))
 	return 0, nil
 }
 
 func (w *ResponseWriter) WriteHeader(header int) {
-	fmt.Println("ResponseWriter.WriteHeader(): ", header)
+	fmt.Println("Writing Response Header(): ", header)
 }
 
 func (w *ResponseWriter) Header() http.Header {
-	fmt.Println("ResponseWriter.Header()")
+	fmt.Println("Getting Response Header: ", nil)
 	return make(map[string][]string)
 }

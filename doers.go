@@ -6,7 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// Doer ...
+// Doer is a function executed (after converters) in HandleError
 type Doer func(err error)
 
 // LogError ...
@@ -15,7 +15,7 @@ func LogError(logFields log.Fields) Option { // This function is misnamed
 	return func(cfg *handlerConfig) {
 
 		do := func(err error) {
-			log.WithError(err).WithFields(logFields).Error("Error")
+			log.WithError(err).WithFields(logFields).Error("")
 		}
 
 		cfg.doers = append(cfg.doers, do)
