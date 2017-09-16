@@ -10,35 +10,49 @@ type Converter func(err error) error // The functions below could be terser if t
 // TODO: These functions should return Option
 
 // StatusMessage overwrites the error message with the status (obfuscating the internal working of a system)
-func StatusMessage(err error) error {
+func StatusMessage() Option {
 
-	if IsNError(err) {
-		e := err.(NError)
+	return func(cfg *handlerConfig) {
+		converter := func(err error) error {
+			if IsNError(err) {
+				e := err.(NError)
 
-		statusMessage := strconv.Itoa(e.Status())
+				statusMessage := strconv.Itoa(e.Status())
 
-		return New(statusMessage, e.Status())
+				return New(statusMessage, e.Status())
+			}
+
+			// TODO: Log warning?
+
+			return err
+		}
+
+		cfg.converters = append(cfg.converters, converter)
 	}
 
-	// TODO: Log warning?
-
-	return err
 }
 
 // ToHTTPStatus ...
-func ToHTTPStatus(err error) error {
+func ToHTTPStatus() Option {
 
-	if IsNError(err) {
-		e := err.(NError)
+	return func(cfg *handlerConfig) {
+		converter := func(err error) error {
+			if IsNError(err) {
+				e := err.(NError)
 
-		httpStatus, ok := toHTTP[e.Status()]
+				httpStatus, ok := ToHTTPMap[e.Status()]
 
-		if ok {
-			return WrapStatus(e, httpStatus)
+				if ok {
+					return WrapStatus(e, httpStatus)
+				}
+			}
+
+			return Internal(err)
 		}
+
+		cfg.converters = append(cfg.converters, converter)
 	}
 
-	return Internal(err)
 }
 
 // ToErrorAPIStatus is for converting error statuses for internal use to error statuses for API clients

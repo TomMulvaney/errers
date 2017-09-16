@@ -5,9 +5,9 @@ import (
 )
 
 var (
-	fromHTTP map[int]int // Populated in init
+	FromHTTPMap map[int]int // Populated in init
 
-	toHTTP = map[int]int{
+	ToHTTPMap = map[int]int{
 		StatusBadReq:              http.StatusBadRequest,
 		StatusForbidden:           http.StatusForbidden,
 		StatusNotFound:            http.StatusNotFound,

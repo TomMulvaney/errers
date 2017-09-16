@@ -25,14 +25,12 @@ func main() {
 	// TODO: Convert to HTTP Status
 
 	w := NewResponseWriter()
-	opt := errors.WriteHeader(w, http.StatusInternalServerError)
-	options = append(options, opt)
+	options = append(options, errors.WriteHeader(w, http.StatusInternalServerError))
 
 	logFields := log.Fields{
 		"Hello": "World",
 	}
-	opt = errors.LogError(logFields)
-	options = append(options, opt)
+	options = append(options, errors.LogError(logFields))
 
 	errors.HandleError(err, options...)
 }

@@ -1,9 +1,9 @@
 package errors
 
 func init() {
-	fromHTTP = make(map[int]int, len(toHTTP))
+	FromHTTPMap = make(map[int]int, len(ToHTTPMap))
 
-	for k, v := range toHTTP {
-		fromHTTP[v] = k
+	for k, v := range ToHTTPMap {
+		FromHTTPMap[v] = k
 	}
 }
