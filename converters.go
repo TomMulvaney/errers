@@ -1,28 +1,47 @@
 package errors
 
-// ErrorConverter ...
-type ErrorConverter interface {
-	Do(err error) error
-}
+import (
+	"strconv"
+)
 
-type errorConverter struct {
-	do errorConverterFunc
-}
+// Converter ...
+type Converter func(err error) error // The functions below could be terser if this has NError param and return type
 
-func (ec *errorConverter) Do(err error) error {
-	return ec.do(err)
-}
+// StatusMessage overwrites the error message with the status (obfuscating the internal working of a system)
+func StatusMessage(err error) error {
 
-func NewErrorConverter(do errorConverterFunc) *errorConverter { // This errors when return interface
-	return &errorConverter{
-		do: do,
+	if IsNError(err) {
+		e := err.(NError)
+
+		statusMessage := strconv.Itoa(e.Status())
+
+		return New(statusMessage, e.Status())
 	}
+
+	// TODO: Log warning?
+
+	return err
 }
 
-type errorConverterFunc func(err error) error
+// ToHTTPStatus ...
+func ToHTTPStatus(err error) error {
 
-// ToStatusMessage overwrites the error message with the status (obfuscating the internal working of a system)
-func ToStatusMessage(err error) error {
-	// TODO: Strip message
-	return err
+	if IsNError(err) {
+		e := err.(NError)
+
+		httpStatus, ok := toHTTP[e.Status()]
+
+		if ok {
+			return WrapStatus(e, httpStatus)
+		}
+	}
+
+	return Internal(err)
+}
+
+// ToErrorAPIStatus is for converting error statuses for internal use to error statuses for API clients
+// For example, convert UpstreamUnreachable to Internal to obfuscate the system to end users
+// Should this be done in the handlers?
+func ToErrorAPIStatus(status int) int {
+	return StatusUnknown
 }

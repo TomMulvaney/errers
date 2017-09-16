@@ -46,11 +46,11 @@ func hypnosAPIMiddlerware() {
 	err, ok := handleHypnosError(err) // This bit is optional, maybe there is no HypnosError type
 
 	if !ok {
-		err, ok = errors.HandleErrer(err)
+		err, ok = errors.HandleNError(err)
 
 		if !ok {
 			// Log Warning
-			err = errors.Unknown(err, "Error is unknown type. Consider updating the Hypnos error handler")
+			err = errors.Unknown(err, "nError is unknown type. Consider updating the Hypnos error handler")
 		}
 	}
 
@@ -72,6 +72,8 @@ func main() {
 	err = errors.Wrap(err, "Nightmare about not being able to wake up from the nightmare")
 
 	err = errors.Internal(err, "We are experiencing some technical difficulties", "Please try to relax with this smooth jazz")
+
+	err.SetMessage("This is the message")
 
 	fmt.Println(err)
 }

@@ -1,36 +1,23 @@
 package errors
 
-import (
-	log "github.com/sirupsen/logrus"
-)
-
 type handlerConfig struct {
-	converters                 []ErrorConverter
-	mappers                    []StatusMapper
-	logFields                  *log.Fields // Pointer lets us do a null check to decide whether to log
-	overwriteMessageWithStatus bool
+	converters []Converter
+	doers      []Doer
 }
 
 // Option ...
 type Option func(*handlerConfig)
 
-// WithStatusMapper ...
-func WithStatusMapper(mapper StatusMapper) Option {
+// Convert ...
+func Convert(converter Converter) Option {
 	return func(cfg *handlerConfig) {
-		cfg.mappers = append(cfg.mappers, mapper)
+		cfg.converters = append(cfg.converters, converter)
 	}
 }
 
-// WithLogFields ...
-func WithLogFields(logFields log.Fields) Option {
+// Do ...
+func Do(doer Doer) Option {
 	return func(cfg *handlerConfig) {
-		cfg.logFields = &logFields
-	}
-}
-
-// WithStatusMessage overwrites the error's message with the error's status
-func WithStatusMessage() Option {
-	return func(cfg *handlerConfig) {
-		cfg.overwriteMessageWithStatus = true
+		cfg.doers = append(cfg.doers, doer)
 	}
 }
