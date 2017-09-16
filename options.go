@@ -8,16 +8,16 @@ type handlerConfig struct {
 // Option ...
 type Option func(*handlerConfig)
 
-// Convert ...
-func Convert(converter Converter) Option {
-	return func(cfg *handlerConfig) {
-		cfg.converters = append(cfg.converters, converter)
-	}
-}
+// // Convert ...
+// func Convert(converter Converter) Option {
+// 	return func(cfg *handlerConfig) {
+// 		cfg.converters = append(cfg.converters, converter)
+// 	}
+// }
 
-// Do ...
-func Do(doer Doer) Option {
-	return func(cfg *handlerConfig) {
-		cfg.doers = append(cfg.doers, doer)
-	}
-}
+// // Do ...
+// func Do(doer Doer) Option {
+// 	return func(cfg *handlerConfig) {
+// 		cfg.doers = append(cfg.doers, doer)
+// 	}
+// }
