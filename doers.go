@@ -10,7 +10,7 @@ import (
 type Doer func(err error)
 
 // LogError ...
-func LogError(logFields log.Fields) Option {
+func LogError(logFields log.Fields) Option { // This function is misnamed
 
 	return func(cfg *handlerConfig) {
 
@@ -23,7 +23,7 @@ func LogError(logFields log.Fields) Option {
 }
 
 // WriteHeader ...
-func WriteHeader(w http.ResponseWriter, defaultHeader int) Option {
+func WriteHeader(w http.ResponseWriter, defaultHeader int) Option { // This function is misnamed
 
 	return func(cfg *handlerConfig) {
 
