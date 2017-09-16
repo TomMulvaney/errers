@@ -4,6 +4,8 @@ import (
 	"strconv"
 )
 
+// TODO: Deprecate - Doer should be type func(error) error
+
 // Converter is a function executed (before doers) in HandleError
 type Converter func(err error) error // The functions below could be terser if this has NError param and return type
 

@@ -16,11 +16,28 @@ const (
 	urlBase = "http://hypnos.com/api/v1"
 )
 
+// LowLevelHTTPClientGET ...
+func LowLevelHTTPClientGET() error {
+	err := errors.Unavailable(baseErrors.New("Global Insomnia, nobody can sleep")) // Imagine that we just failed parsing JSON
+
+	// TODO: Move this to func in nskeleton/errors called ConvertHTTPClient(err error) error
+	if errors.IsNError(err) {
+		e := err.(errors.NError)
+
+		switch e.Status() {
+		case errors.StatusUnavailable:
+			err = errors.UpstreamUnavailable(err)
+		}
+	}
+
+	return err
+}
+
 // ReadDream ...
 func ReadDream(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
-	err := errors.Unavailable(baseErrors.New("Global Insomnia")) // Imagine that we just failed parsing JSON
+	err := LowLevelHTTPClientGET()
 
-	return errors.UpstreamUnavailable(err, "Failed to reach dream cache")
+	return errors.Wrap(err, "Failed getting from dream cache")
 }
 
 func getPath(url *url.URL) string {
