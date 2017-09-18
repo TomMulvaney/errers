@@ -36,7 +36,7 @@ var (
 )
 
 // ToGRPCStatus ...
-func ToGRPCStatus(err error) error {
+func ToGRPCStatus(err error) error { // TODO: Use GRPC constructor
 	grpcStatus, ok := ToGRPCMap[errors.Status(err)]
 
 	if ok {
