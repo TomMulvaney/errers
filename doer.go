@@ -1,7 +1,6 @@
 package errors
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -27,14 +26,10 @@ func StatusMessage(err error) error {
 func ToHTTPStatus(err error) error {
 	httpStatus, ok := ToHTTPMap[Status(err)]
 
-	fmt.Printf("ToHTTPStatus: %d -> %d\n", Status(err), httpStatus)
-
 	if ok {
-		fmt.Println("Wrapping status", httpStatus)
 		return WrapStatus(err, httpStatus)
 	}
 
-	fmt.Println("Not Ok")
 	return Internal(err)
 }
 
@@ -42,7 +37,6 @@ func ToHTTPStatus(err error) error {
 func Upstream(err error) error {
 	switch Status(err) {
 	case StatusUnavailable:
-		fmt.Printf("Converting StatusUnavailable %d to StatusUpstreamUnavailable %d\n", StatusUnavailable, StatusUpstreamUnavailable)
 		return UpstreamUnavailable(err)
 	}
 

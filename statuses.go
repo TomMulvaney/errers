@@ -3,14 +3,20 @@ package errors
 const (
 	StatusUnknown int = iota
 
+	StatusOK
+
+	StatusCancelled
+
 	// Client Errors
 	StatusBadReq
+	StatusInvalidArgument
+	StatusAlreadyExists
+	StatusFailedPrecondition
 	StatusUnauthenticated
 	StatusForbidden
 	StatusNotFound
 	StatusWrongAcceptType
 	StatusReqTimeout
-	StatusFailedPrecondition
 	StatusTooManyReqs
 
 	// Server Errors
@@ -18,6 +24,9 @@ const (
 	StatusUnimplemented
 	StatusUpstreamUnavailable
 	StatusUnavailable
+	StatusAborted
+	StatusDataLoss
+	StatusResourceExhausted
 
 	delim = ": " // Same delim as pkgErrors
 )

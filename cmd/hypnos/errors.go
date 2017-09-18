@@ -1,4 +1,4 @@
-package hypnos
+package main
 
 import (
 	"github.com/nskeleton/errors"
@@ -15,7 +15,7 @@ type ErrorImp struct {
 	errors.NErrorImp
 }
 
-func (e *HypnosError) isHypnosError() bool {
+func (e *ErrorImp) isHypnosError() bool {
 	return true
 }
 
@@ -23,4 +23,16 @@ func (e *HypnosError) isHypnosError() bool {
 func IsHypnosError(err error) bool {
 	e, ok := err.(Error)
 	return ok && e.isHypnosError()
+}
+
+// HandleHypnosError ...
+func HandleHypnosError(err error) error {
+	if IsHypnosError(err) {
+		// TODO
+
+		// e := err.(HypnosError)
+		// err = errors.WrapStatus(e, hypnosToHTTPStatus(e.Status()))
+	}
+
+	return err
 }
