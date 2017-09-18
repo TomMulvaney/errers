@@ -45,3 +45,16 @@ func ToGRPCStatus(err error) error {
 
 	return errors.WrapStatus(err, int(codes.Internal))
 }
+
+// FromGRPCStatus ...
+func FromGRPCStatus(err error) error {
+	grpcStatus := codes.Code(errors.StatusU32(err))
+
+	status, ok := FromGRPCMap[grpcStatus]
+
+	if ok {
+		return errors.WrapStatus(err, status)
+	}
+
+	return errors.WrapStatus(err, errors.StatusUnknown)
+}

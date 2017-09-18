@@ -5,9 +5,12 @@ import (
 	"net/http"
 	"net/url"
 
+	"google.golang.org/grpc/codes"
+
 	baseErrors "errors"
 
 	"github.com/nskeleton/errors"
+	"github.com/nskeleton/errors/grpc"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -16,15 +19,15 @@ const (
 	urlBase = "http://hypnos.com/api/v1"
 )
 
-// DreamDBClientGET ...
-func DreamDBClientGET() error {
-	return errors.Unavailable(baseErrors.New("Global Insomnia")) // Imagine that we just failed parsing JSON
+// GRPCClient ...
+func GRPCClient() error {
+	err := errors.WrapStatus(baseErrors.New("Global Insomnia"), int(codes.Unavailable))
+	return grpc.FromGRPCStatus(err)
 }
 
 // ReadDream ...
 func ReadDream(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
-	err := DreamDBClientGET()
-
+	err := GRPCClient()
 	return errors.Wrap(err, "Failed getting from dream database")
 }
 

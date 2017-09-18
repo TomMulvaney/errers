@@ -30,7 +30,18 @@ func ToHTTPStatus(err error) error {
 		return WrapStatus(err, httpStatus)
 	}
 
-	return Internal(err)
+	return WrapStatus(err, http.StatusInternalServerError)
+}
+
+// FromHTTPStatus ...
+func FromHTTPStatus(err error) error {
+	status, ok := FromHTTPMap[Status(err)]
+
+	if ok {
+		return WrapStatus(err, status)
+	}
+
+	return WrapStatus(err, StatusUnknown)
 }
 
 // Upstream converts error statuses received from upstream servers
