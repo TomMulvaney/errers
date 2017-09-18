@@ -1,21 +1,13 @@
 package hypnos
 
-import (
-	"github.com/nskeleton/errors"
-)
-
-func hypnosToHTTPStatus(status int) int {
-	return errors.StatusUnknown
-}
-
 // HandleHypnosError ...
-func HandleHypnosError(err error) (error, bool) {
+func HandleHypnosError(err error) error {
 	if IsHypnosError(err) {
-		e := err.(HypnosError)
-		err = errors.WrapStatus(e, hypnosToHTTPStatus(e.Status()))
+		// TODO
 
-		return err, true
+		// e := err.(HypnosError)
+		// err = errors.WrapStatus(e, hypnosToHTTPStatus(e.Status()))
 	}
 
-	return err, false
+	return err
 }

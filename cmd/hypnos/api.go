@@ -16,28 +16,16 @@ const (
 	urlBase = "http://hypnos.com/api/v1"
 )
 
-// LowLevelHTTPClientGET ...
-func LowLevelHTTPClientGET() error {
-	err := errors.Unavailable(baseErrors.New("Global Insomnia, nobody can sleep")) // Imagine that we just failed parsing JSON
-
-	// TODO: Move this to func in nskeleton/errors called ConvertHTTPClient(err error) error
-	if errors.IsNError(err) {
-		e := err.(errors.NError)
-
-		switch e.Status() {
-		case errors.StatusUnavailable:
-			err = errors.UpstreamUnavailable(err)
-		}
-	}
-
-	return err
+// DreamDBClientGET ...
+func DreamDBClientGET() error {
+	return errors.Unavailable(baseErrors.New("Global Insomnia")) // Imagine that we just failed parsing JSON
 }
 
 // ReadDream ...
 func ReadDream(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
-	err := LowLevelHTTPClientGET()
+	err := DreamDBClientGET()
 
-	return errors.Wrap(err, "Failed getting from dream cache")
+	return errors.Wrap(err, "Failed getting from dream database")
 }
 
 func getPath(url *url.URL) string {
@@ -50,19 +38,22 @@ func APIMiddleware(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background() // TODO
 
 	if err := ReadDream(ctx, w, r); err != nil {
-		var opts []errors.Option
 
-		opts = append(opts, errors.ToHTTPStatus())
+		var doers []errors.Doer
+
+		doers = append(doers, errors.Upstream)
+
+		doers = append(doers, errors.ToHTTPStatus)
 
 		logFields := log.Fields{
-			"Path":   getPath(r.URL), // TODO
+			"Path":   getPath(r.URL),
 			"Method": r.Method,
 		}
 
-		opts = append(opts, errors.LogError(logFields))
+		doers = append(doers, errors.LogError(logFields))
 
-		opts = append(opts, errors.WriteHeader(w, http.StatusInternalServerError)) // Default InternalServerError
+		doers = append(doers, errors.WriteHTTPHeader(w))
 
-		errors.HandleError(err, opts...)
+		errors.HandleError(err, doers...)
 	}
 }

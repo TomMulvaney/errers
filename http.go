@@ -13,11 +13,11 @@ var (
 		StatusNotFound:            http.StatusNotFound,
 		StatusWrongAcceptType:     http.StatusNotAcceptable,
 		StatusReqTimeout:          http.StatusRequestTimeout,
-		StatusPreconditionFailed:  http.StatusPreconditionFailed,
+		StatusFailedPrecondition:  http.StatusPreconditionFailed,
 		StatusTooManyReqs:         http.StatusTooManyRequests,
 		StatusInternal:            http.StatusInternalServerError,
 		StatusUnimplemented:       http.StatusNotImplemented,
-		StatusUpstreamUnreachable: http.StatusBadGateway,
+		StatusUpstreamUnavailable: http.StatusBadGateway,
 		StatusUnavailable:         http.StatusServiceUnavailable,
 	}
 )

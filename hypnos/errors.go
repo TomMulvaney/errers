@@ -4,15 +4,15 @@ import (
 	"github.com/nskeleton/errors"
 )
 
-// IHypnosError ...
-type IHypnosError interface { // Stutter is for demo purposes, you should proably call this NError or something
+// Error ...
+type Error interface { // Stutter is for demo purposes, you should proably call this NError or something
 	errors.NError
 	isHypnosError() bool
 }
 
-// HypnosError ...
-type HypnosError struct {
-	errors.nError
+// ErrorImp ...
+type ErrorImp struct {
+	errors.NErrorImp
 }
 
 func (e *HypnosError) isHypnosError() bool {
@@ -21,6 +21,6 @@ func (e *HypnosError) isHypnosError() bool {
 
 // IsHypnosError ...
 func IsHypnosError(err error) bool {
-	e, ok := err.(HypnosError)
+	e, ok := err.(Error)
 	return ok && e.isHypnosError()
 }
