@@ -35,15 +35,28 @@ var (
 	}
 )
 
+// ToGRPC ...
+func ToGRPC(err error) error { // TODO: Use GRPC constructor
+	// grpcStatus, ok := ToGRPCMap[errors.Status(err)]
+
+	// if ok {
+	// 	status.Error(grpcStatus, err.Message())
+	// }
+
+	// return status.Error(codes.Unknown, err.Message())
+
+	return ToGRPCStatus(err)
+}
+
 // ToGRPCStatus ...
-func ToGRPCStatus(err error) error { // TODO: Use GRPC constructor
+func ToGRPCStatus(err error) error {
 	grpcStatus, ok := ToGRPCMap[errors.Status(err)]
 
 	if ok {
-		return errors.WrapStatus(err, int(grpcStatus))
+		errors.WrapStatus(err, int(grpcStatus))
 	}
 
-	return errors.WrapStatus(err, int(codes.Internal))
+	return errors.WrapStatus(err, int(codes.Unknown))
 }
 
 // FromGRPCStatus ...
