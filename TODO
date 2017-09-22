@@ -1,0 +1,16 @@
+Gen Functions:
+Wrapf
+WrapStatusf
+Parse
+
+NError Methods:
+ID() string
+
+Doers:
+StripPrivate
+StripEnd
+StripStart
+StripMiddle
+StripServer
+
+

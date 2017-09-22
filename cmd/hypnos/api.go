@@ -28,7 +28,7 @@ func GRPCClient() error {
 // ReadDream ...
 func ReadDream(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 	err := GRPCClient()
-	return errors.Wrap(err, "Failed getting from dream database")
+	return errors.BadReq(err, "Failed getting from dream database")
 }
 
 func getPath(url *url.URL) string {
@@ -47,6 +47,8 @@ func APIMiddleware(w http.ResponseWriter, r *http.Request) {
 		doers = append(doers, errors.Upstream)
 
 		doers = append(doers, errors.ToHTTPStatus)
+
+		doers = append(doers, errors.StatusMessage)
 
 		logFields := log.Fields{
 			"Path":   getPath(r.URL),
